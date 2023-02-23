@@ -48,6 +48,7 @@ def checkForSpamMails(email, password):
             pass
         except Exception as e:
             raise e
+    server.quit()
 
 def startCheck():
         emails, passwords = readEmails()
