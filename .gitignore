@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#
+emails.json
+
 # C extensions
 *.so
 

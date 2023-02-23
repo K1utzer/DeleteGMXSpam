@@ -1,1 +1,1 @@
-# Delete-GMX-Spam
+# Delete-GMX-Advertising-Mails
