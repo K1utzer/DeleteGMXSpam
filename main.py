@@ -41,7 +41,6 @@ def checkForSpamMails(email, password):
             for email in blacklist:
                 if (email in email_from):
                     server.dele(c)
-                    #print(f"Delete: {c}; Email: {email_from}")
         except poplib.error_proto:
             pass
         except ssl.SSLError:

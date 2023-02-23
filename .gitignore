@@ -5,7 +5,7 @@ __pycache__/
 
 #
 emails.json
-
+blacklist.txt
 # C extensions
 *.so
 
