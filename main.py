@@ -1,11 +1,12 @@
-import json
 from email.utils import parseaddr
 from email.header import decode_header
 from email.parser import Parser
+from tqdm import tqdm
+import json
 import poplib
 import ssl
-import socket
-from tqdm import tqdm
+import concurrent.futures
+
 
 poplib._MAXLINE = 20480
 
@@ -27,10 +28,11 @@ def login(email, password):
     server.pass_(password)
     return server
 
-def checkForSpamMails(server, to_email):
+def checkForSpamMails(email, password):
+    server = login(email, password)
     blacklist = readBlacklist()
     _, mails, _ = server.list()
-    for c in tqdm(range(1, len(mails)+1), f"Checking: {to_email}"):
+    for c in tqdm(range(1, len(mails)+1), f"Checking: {email}"):
         try:
             _, lines, _ = server.retr(c)
             msg_content = b'\r\n'.join(lines).decode(errors="ignore")
@@ -39,17 +41,19 @@ def checkForSpamMails(server, to_email):
             for email in blacklist:
                 if (email in email_from):
                     server.dele(c)
-                    print(f"Delete: {c}; Email: {email_from}")
+                    #print(f"Delete: {c}; Email: {email_from}")
         except poplib.error_proto:
+            pass
+        except ssl.SSLError:
             pass
         except Exception as e:
             raise e
 
 def startCheck():
         emails, passwords = readEmails()
-        for email, password in zip(emails, passwords):
-            server = login(email, password)
-            checkForSpamMails(server, email)
-            server.quit()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+            for email, password in zip(emails, passwords):
+                executor.submit(
+                    checkForSpamMails, email, password)
 
 startCheck()
