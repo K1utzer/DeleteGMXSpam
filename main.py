@@ -44,6 +44,7 @@ def checkForSpamMails(email, password):
         except poplib.error_proto:
             pass
         except ssl.SSLError:
+            #TODO: fix this error
             pass
         except Exception as e:
             raise e
