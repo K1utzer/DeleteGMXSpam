@@ -22,8 +22,7 @@ def readBlacklist() -> list:
     return blacklist
 
 def login(email, password):
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    server = poplib.POP3_SSL('pop.gmx.net', port=995, context=context)
+    server = poplib.POP3_SSL('pop.gmx.net', port=995)
     server.user(email)
     server.pass_(password)
     return server
@@ -31,8 +30,8 @@ def login(email, password):
 def checkForSpamMails(email, password):
     server = login(email, password)
     blacklist = readBlacklist()
-    _, mails, _ = server.list()
-    for c in tqdm(range(1, len(mails)+1), f"Checking: {email}"):
+    mails, _ = server.stat()
+    for c in tqdm(range(1, mails+1), f"Checking: {email}"):
         try:
             _, lines, _ = server.retr(c)
             msg_content = b'\r\n'.join(lines).decode(errors="ignore")
