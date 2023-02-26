@@ -31,7 +31,7 @@ def checkForSpamMails(email, password):
     server = login(email, password)
     blacklist = readBlacklist()
     mails, _ = server.stat()
-    for c in tqdm(range(1, mails+1), f"Checking: {email}"):
+    for c in tqdm(range(mails+1, 1, -1), f"Checking: {email}"):
         try:
             _, lines, _ = server.retr(c)
             msg_content = b'\r\n'.join(lines).decode(errors="ignore")
