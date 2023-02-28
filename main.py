@@ -9,12 +9,12 @@ import concurrent.futures
 import os
 import pathlib
 
-pfad = f"{os.path.dirname(pathlib.Path(__file__).parent.resolve())}"
+path = f"{os.path.dirname(pathlib.Path(__file__))}"
 
 poplib._MAXLINE = 20480
 
 def readEmails():
-    with open(os.path.join(pfad, "emails.json"), "r") as f:
+    with open(os.path.join(path, "emails.json"), "r") as f:
         emailAccs = f.read()
     emailAccs = json.loads(emailAccs)
     return emailAccs['emails'], emailAccs['passwords']
