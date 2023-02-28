@@ -6,12 +6,15 @@ import json
 import poplib
 import ssl
 import concurrent.futures
+import os
+import pathlib
 
+pfad = f"{os.path.dirname(pathlib.Path(__file__).parent.resolve())}"
 
 poplib._MAXLINE = 20480
 
 def readEmails():
-    with open("emails.json", "r") as f:
+    with open(f"{pfad}\\emails.json", "r") as f:
         emailAccs = f.read()
     emailAccs = json.loads(emailAccs)
     return emailAccs['emails'], emailAccs['passwords']
