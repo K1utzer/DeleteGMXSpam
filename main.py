@@ -61,7 +61,6 @@ def startCheck():
     emails, passwords = readEmails()
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         for email, password in zip(emails, passwords):
-            print(email)
             executor.submit(
                 checkForSpamMails, email, password)
 
